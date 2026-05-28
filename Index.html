@@ -4,11 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- ✅ Google Verification (KEEP) -->
+<!-- Google Verification SAFE -->
 <meta name="google-site-verification" content="SAmaKfnAyKzfxWGySUlgohUGNk5iha_iuZqJAqzmPFw" />
 
-<title>Ripon Nath Music | Bangla Hindi Lofi</title>
-<meta name="description" content="Listen Bangla & Hindi songs online. Ripon Nath music collection.">
+<title>Ripon Nath Music</title>
 
 <style>
 html{scroll-behavior:smooth}
@@ -16,15 +15,14 @@ body{margin:0;font-family:Arial;background:#0f0f0f;color:white}
 header{background:#000;padding:15px;text-align:center;font-size:22px;font-weight:bold}
 .container{padding:20px}
 
-/* GRID */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:15px}
 .card{background:#1c1c1c;border-radius:10px;overflow:hidden;cursor:pointer;transition:.4s;opacity:0;transform:translateY(40px)}
 .card.show{opacity:1;transform:translateY(0)}
 .card:hover{transform:scale(1.05)}
 .card img{width:100%}
-.card p{padding:10px;font-size:14px}
+.card p{padding:10px}
 
-/* FLOATING PLAYER (macOS style) */
+/* PLAYER */
 .player{
  position:fixed;
  top:100px;
@@ -36,35 +34,17 @@ header{background:#000;padding:15px;text-align:center;font-size:22px;font-weight
  box-shadow:0 15px 35px rgba(0,0,0,0.4);
  display:none;
  z-index:9999;
- overflow:hidden;
  cursor:move;
 }
 
-/* macOS dots */
-.topbar{
- display:flex;
- gap:6px;
- padding:8px;
- background:#e0e0e0;
-}
+.topbar{display:flex;gap:6px;padding:8px;background:#ddd}
 .dot{width:10px;height:10px;border-radius:50%}
 .red{background:#ff5f57}
 .yellow{background:#ffbd2e}
 .green{background:#28c840}
 
-.equalizer{
- display:flex;
- justify-content:center;
- align-items:end;
- height:80px;
- gap:5px;
- margin:15px 0;
-}
-.bar{
- width:6px;
- background:linear-gradient(180deg,#00ff99,#00cc66);
- animation:equalize 1s infinite ease-in-out;
-}
+.equalizer{display:flex;justify-content:center;align-items:end;height:80px;gap:5px;margin:10px}
+.bar{width:6px;background:linear-gradient(180deg,#00ff99,#00cc66);animation:equalize 1s infinite}
 .bar:nth-child(2){animation-delay:.2s}
 .bar:nth-child(3){animation-delay:.4s}
 .bar:nth-child(4){animation-delay:.6s}
@@ -77,7 +57,7 @@ button{padding:6px 10px;border:none;border-radius:5px;cursor:pointer}
 .playBtn{background:#00cc66;color:white}
 .closeBtn{background:red;color:white}
 
-.hiddenFrame{display:none}
+iframe{display:none}
 </style>
 </head>
 
@@ -108,26 +88,18 @@ button{padding:6px 10px;border:none;border-radius:5px;cursor:pointer}
  </div>
 </div>
 
-<!-- Hidden YouTube -->
-<iframe id="musicFrame" class="hiddenFrame" src="" allow="autoplay"></iframe>
+<iframe id="musicFrame" allow="autoplay"></iframe>
 
-<script src="https://www.youtube.com/iframe_api"></script>
 <script>
-const songs=["d_XaQAdOdZk","jKEIQWeyyUI","cNzblRC5nI0","8eSjhIFPEPY","VR27nxaTzn8"];
+const songs=[
+"d_XaQAdOdZk","jKEIQWeyyUI","cNzblRC5nI0","8eSjhIFPEPY","VR27nxaTzn8","7OE25aNgzOY","F55YFwMisFA","quEd0V944tU","FDgDo_5wcps","1mWPaBvo5Ns","NJa8VEILPZY","dalOy2ipVvo","OpQWHXIo0Vo","XCq-g4b67iw","Vm-yZZdNkXU","fFe86asIBcc","YcrYyVBle_c","6v89J39ghyk","X4Ym-6Jz2cE","HehySB_2YfY","o4c-ZKU9V-o","5yYYZJVrttg","APzgK89PWKs","OyKf7RQ9GDY","dMCHrcKgJrI","lANVJtndZzU","kRwuOkTC5Vk","NX-atj4MJww","qlqqHV2zNJQ","7CAYN8VXzj0","GuvNxP8Vr9U","o7VLbB6VbYI","njBZFd97R10","THRFH1EAzJM","wGW_B7kw3lI","Kp5svOiogoc"
+];
+
 let currentIndex=0;
-let playerYT;
-
-function onYouTubeIframeAPIReady(){
- playerYT=new YT.Player('musicFrame',{events:{'onStateChange':onPlayerStateChange}});
-}
-
-function onPlayerStateChange(event){
- if(event.data==YT.PlayerState.ENDED){
-  nextSong();
- }
-}
+let isPlaying=true;
 
 const grid=document.getElementById("songGrid");
+
 songs.forEach((id,index)=>{
  const card=document.createElement("div");
  card.className="card";
@@ -146,8 +118,9 @@ document.querySelectorAll('.card').forEach(el=>observer.observe(el));
 
 function playSong(index){
  currentIndex=index;
+ isPlaying=true;
  document.getElementById('player').style.display='block';
- playerYT.loadVideoById(songs[index]);
+ document.getElementById('musicFrame').src="https://www.youtube.com/embed/"+songs[index]+"?autoplay=1";
 }
 
 function nextSong(){
@@ -161,14 +134,17 @@ function prevSong(){
 }
 
 function togglePlay(){
- const state=playerYT.getPlayerState();
- if(state==1){playerYT.pauseVideo();}
- else{playerYT.playVideo();}
+ if(isPlaying){
+  document.getElementById('musicFrame').src="";
+  isPlaying=false;
+ }else{
+  playSong(currentIndex);
+ }
 }
 
 function closePlayer(){
  document.getElementById('player').style.display='none';
- playerYT.stopVideo();
+ document.getElementById('musicFrame').src="";
 }
 
 // drag
