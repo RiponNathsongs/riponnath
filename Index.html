@@ -4,29 +4,67 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- ✅ Google Verification (KEEP THIS) -->
+<!-- ✅ Google Verification (KEEP) -->
 <meta name="google-site-verification" content="SAmaKfnAyKzfxWGySUlgohUGNk5iha_iuZqJAqzmPFw" />
 
-<!-- SEO -->
-<title>Ripon Nath Music | Bangla Hindi Sad Lofi Songs</title>
-<meta name="description" content="Listen to Bangla, Hindi, Sad, Lofi songs by Ripon Nath. Free online music streaming.">
-<meta name="keywords" content="Ripon Nath, Bangla song, Hindi song, sad song, lofi music">
+<title>Ripon Nath Music | Bangla Hindi Lofi</title>
+<meta name="description" content="Listen Bangla & Hindi songs online. Ripon Nath music collection.">
 
 <style>
+html{scroll-behavior:smooth}
 body{margin:0;font-family:Arial;background:#0f0f0f;color:white}
 header{background:#000;padding:15px;text-align:center;font-size:22px;font-weight:bold}
 .container{padding:20px}
+
+/* GRID */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:15px}
-.card{background:#1c1c1c;border-radius:10px;overflow:hidden;cursor:pointer;transition:.3s}
+.card{background:#1c1c1c;border-radius:10px;overflow:hidden;cursor:pointer;transition:.4s;opacity:0;transform:translateY(40px)}
+.card.show{opacity:1;transform:translateY(0)}
 .card:hover{transform:scale(1.05)}
 .card img{width:100%}
 .card p{padding:10px;font-size:14px}
 
-/* FLOATING PLAYER (OFF-WHITE) */
-.player{position:fixed;top:100px;left:100px;width:280px;background:#f5f5f5;color:#000;border:2px solid #ddd;border-radius:15px;padding:15px;z-index:9999;display:none;cursor:move;box-shadow:0 10px 25px rgba(0,0,0,0.4)}
+/* FLOATING PLAYER (macOS style) */
+.player{
+ position:fixed;
+ top:100px;
+ left:100px;
+ width:300px;
+ background:#f5f5f5;
+ color:#000;
+ border-radius:15px;
+ box-shadow:0 15px 35px rgba(0,0,0,0.4);
+ display:none;
+ z-index:9999;
+ overflow:hidden;
+ cursor:move;
+}
 
-.equalizer{display:flex;justify-content:center;align-items:end;height:80px;gap:5px;margin-bottom:10px}
-.bar{width:6px;background:#333;animation:equalize 1s infinite ease-in-out}
+/* macOS dots */
+.topbar{
+ display:flex;
+ gap:6px;
+ padding:8px;
+ background:#e0e0e0;
+}
+.dot{width:10px;height:10px;border-radius:50%}
+.red{background:#ff5f57}
+.yellow{background:#ffbd2e}
+.green{background:#28c840}
+
+.equalizer{
+ display:flex;
+ justify-content:center;
+ align-items:end;
+ height:80px;
+ gap:5px;
+ margin:15px 0;
+}
+.bar{
+ width:6px;
+ background:linear-gradient(180deg,#00ff99,#00cc66);
+ animation:equalize 1s infinite ease-in-out;
+}
 .bar:nth-child(2){animation-delay:.2s}
 .bar:nth-child(3){animation-delay:.4s}
 .bar:nth-child(4){animation-delay:.6s}
@@ -34,9 +72,11 @@ header{background:#000;padding:15px;text-align:center;font-size:22px;font-weight
 
 @keyframes equalize{0%,100%{height:20px}50%{height:70px}}
 
-.controls{display:flex;justify-content:space-between;margin-top:10px}
+.controls{display:flex;justify-content:space-around;padding:10px}
 button{padding:6px 10px;border:none;border-radius:5px;cursor:pointer}
+.playBtn{background:#00cc66;color:white}
 .closeBtn{background:red;color:white}
+
 .hiddenFrame{display:none}
 </style>
 </head>
@@ -51,27 +91,43 @@ button{padding:6px 10px;border:none;border-radius:5px;cursor:pointer}
 
 <!-- PLAYER -->
 <div class="player" id="player">
-  <div class="equalizer">
-    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-  </div>
-  <div class="controls">
-    <button onclick="prevSong()">⏮</button>
-    <button onclick="nextSong()">⏭</button>
-    <button class="closeBtn" onclick="closePlayer()">✖</button>
-  </div>
+ <div class="topbar">
+  <div class="dot red" onclick="closePlayer()"></div>
+  <div class="dot yellow"></div>
+  <div class="dot green"></div>
+ </div>
+
+ <div class="equalizer">
+  <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+ </div>
+
+ <div class="controls">
+  <button onclick="prevSong()">⏮</button>
+  <button class="playBtn" onclick="togglePlay()">⏯</button>
+  <button onclick="nextSong()">⏭</button>
+ </div>
 </div>
 
 <!-- Hidden YouTube -->
 <iframe id="musicFrame" class="hiddenFrame" src="" allow="autoplay"></iframe>
 
+<script src="https://www.youtube.com/iframe_api"></script>
 <script>
-const songs=[
-"d_XaQAdOdZk","jKEIQWeyyUI","cNzblRC5nI0","8eSjhIFPEPY","VR27nxaTzn8","7OE25aNgzOY","F55YFwMisFA","quEd0V944tU","FDgDo_5wcps","1mWPaBvo5Ns","NJa8VEILPZY","dalOy2ipVvo","OpQWHXIo0Vo","XCq-g4b67iw","Vm-yZZdNkXU","fFe86asIBcc","YcrYyVBle_c","6v89J39ghyk","X4Ym-6Jz2cE","HehySB_2YfY","o4c-ZKU9V-o","5yYYZJVrttg","APzgK89PWKs","OyKf7RQ9GDY","dMCHrcKgJrI","lANVJtndZzU","kRwuOkTC5Vk","NX-atj4MJww","qlqqHV2zNJQ","7CAYN8VXzj0","GuvNxP8Vr9U","o7VLbB6VbYI","njBZFd97R10","THRFH1EAzJM","wGW_B7kw3lI","Kp5svOiogoc"
-];
-
+const songs=["d_XaQAdOdZk","jKEIQWeyyUI","cNzblRC5nI0","8eSjhIFPEPY","VR27nxaTzn8"];
 let currentIndex=0;
-const grid=document.getElementById("songGrid");
+let playerYT;
 
+function onYouTubeIframeAPIReady(){
+ playerYT=new YT.Player('musicFrame',{events:{'onStateChange':onPlayerStateChange}});
+}
+
+function onPlayerStateChange(event){
+ if(event.data==YT.PlayerState.ENDED){
+  nextSong();
+ }
+}
+
+const grid=document.getElementById("songGrid");
 songs.forEach((id,index)=>{
  const card=document.createElement("div");
  card.className="card";
@@ -80,10 +136,18 @@ songs.forEach((id,index)=>{
  grid.appendChild(card);
 });
 
+// scroll animation
+const observer=new IntersectionObserver(entries=>{
+ entries.forEach(entry=>{
+  if(entry.isIntersecting){entry.target.classList.add("show");}
+ });
+});
+document.querySelectorAll('.card').forEach(el=>observer.observe(el));
+
 function playSong(index){
  currentIndex=index;
  document.getElementById('player').style.display='block';
- document.getElementById('musicFrame').src="https://www.youtube.com/embed/"+songs[index]+"?autoplay=1";
+ playerYT.loadVideoById(songs[index]);
 }
 
 function nextSong(){
@@ -96,12 +160,18 @@ function prevSong(){
  playSong(currentIndex);
 }
 
-function closePlayer(){
- document.getElementById('player').style.display='none';
- document.getElementById('musicFrame').src="";
+function togglePlay(){
+ const state=playerYT.getPlayerState();
+ if(state==1){playerYT.pauseVideo();}
+ else{playerYT.playVideo();}
 }
 
-// DRAG
+function closePlayer(){
+ document.getElementById('player').style.display='none';
+ playerYT.stopVideo();
+}
+
+// drag
 const player=document.getElementById("player");
 let isDragging=false,offsetX,offsetY;
 player.addEventListener("mousedown",e=>{isDragging=true;offsetX=e.clientX-player.offsetLeft;offsetY=e.clientY-player.offsetTop;});
